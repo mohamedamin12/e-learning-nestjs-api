@@ -16,12 +16,12 @@ export class AdminDashboardController {
   }
 
   @Post('active-user/:id')
-  activeUser(@Param('id') id: number) {
+  activeUser(@Param('id') id: string) {
     return this.adminDashboardService.activeUser(id);
   }
 
   @Delete('deactive-user/:id')
-  deactiveUser(@Param('id') id: number) {
+  deactiveUser(@Param('id') id: string) {
     return this.adminDashboardService.deactiveUser(id);
   }
 
@@ -36,22 +36,22 @@ export class AdminDashboardController {
   }
 
   @Post('active-instructor/:id')
-  activeInstructor(@Param('id') id: number) {
+  activeInstructor(@Param('id') id: string) {
     return this.adminDashboardService.activeInstructor(id);
   }
 
   @Delete('deactive-instructor/:id')
-  deactiveInstructor(@Param('id') id: number) {
+  deactiveInstructor(@Param('id') id: string) {
     return this.adminDashboardService.deactiveInstructor(id);
   }
 
   @Delete('/courses/:id')
-  removeCourse(@Param('id') id: number) {
+  removeCourse(@Param('id') id: string) {
     return this.adminDashboardService.removeCourse(id);
   }
 
   @Delete('/reviews/:id')
-  removeReview(@Param('id') id: number) {
+  removeReview(@Param('id') id: string) {
     return this.adminDashboardService.removeReview(id);
   }
 }

@@ -22,7 +22,7 @@ export class ReviewService {
     req: any,
     slug: string,
     createReviewDto: CreateReviewDto,
-  ): Promise<Review> {
+  ){
     const { id } = req.user;
     const user = await this.userRepository.findOneBy({ id: id });
     if (!user) throw new NotFoundException("user not found")
@@ -47,7 +47,7 @@ export class ReviewService {
     return await this.reviewRepository.save(reviews);
   }
 
-  async update(req: any, reviewId: number, updateReviewDto: UpdateReviewDto) {
+  async update(req: any, reviewId: string, updateReviewDto: UpdateReviewDto) {
     const { id } = req.user;
     const user = await this.userRepository.findOneBy({ id });
     if (!user) throw new NotFoundException("user not found");
@@ -61,7 +61,7 @@ export class ReviewService {
     return await this.reviewRepository.save(review);
   }
 
-  async remove(req: any, slug: string, reviewId: number): Promise<Review> {
+  async remove(req: any, slug: string, reviewId: string): Promise<Review> {
     const { id } = req.user;
     const course = await this.courseRepository.findOneBy({ slug });
     if (!course) throw new NotFoundException("course not found");

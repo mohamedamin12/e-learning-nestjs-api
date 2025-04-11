@@ -36,7 +36,7 @@ export class ReviewController {
     @Param('reviewId') reviewId: string,
     @Body() updateReviewDto: UpdateReviewDto,
   ) {
-    return this.reviewService.update(req, +reviewId, updateReviewDto);
+    return this.reviewService.update(req, reviewId, updateReviewDto);
   }
 
   @UseGuards(AuthGuard)
@@ -46,7 +46,7 @@ export class ReviewController {
     @Param('slug') slug: string,
     @Param('reviewId') reviewId: string,
   ) {
-    return this.reviewService.remove(req, slug, +reviewId);
+    return this.reviewService.remove(req, slug, reviewId);
   }
 
   @Get('instructor/:username/')

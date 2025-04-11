@@ -1,23 +1,12 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  BeforeInsert,
-  OneToMany,
-  ManyToMany,
-  JoinTable,
-  BeforeUpdate,
-} from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, OneToMany, ManyToMany, JoinTable, BeforeUpdate } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { Course } from 'src/course/entities/course.entity';
 import { Review } from 'src/review/entities/review.entity';
-
-
 
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ length: 30 })
   fullName: string;
@@ -28,35 +17,31 @@ export class User {
   @Column({ unique: true, length: 30 })
   email: string;
 
-  @Column({ select: false }) // typeorm package
+  @Column({ select: false })
   password: string;
 
   @Column({ default: false })
-  isAdmin: boolean; // true or false
+  isAdmin: boolean;
 
   @Column({ default: true })
   active: boolean;
 
-
-  @Column({ nullable: true }) // typeorm package
+  @Column( 'varchar' , { nullable: true })
   avatar: string | null;
 
   @Column({ type: 'timestamp', nullable: true, select: false })
   passwordChangedAt: Date;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ nullable: true, select: false })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   passwordResetCode: string | null;
 
   @Column({ type: 'timestamp', nullable: true, select: false })
   passwordResetExpires: Date | null;
 
-  @Column({ default: false, select: false })
+  @Column({ type: 'boolean' ,default: false, select: false, nullable: true })
   passwordResetVerified: Boolean | null;
 
   @OneToMany(() => Review, (reviews) => reviews.reviewCreator)

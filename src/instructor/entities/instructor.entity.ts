@@ -1,19 +1,12 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  BeforeInsert,
-} from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeInsert } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { InternalServerErrorException } from '@nestjs/common';
-
 import { Course } from 'src/course/entities/course.entity';
 
 @Entity({ name: 'instructors' })
 export class Instructor {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ length: 70 })
   instructorDescription: string;
@@ -24,7 +17,7 @@ export class Instructor {
   @Column({ length: 30, nullable: true })
   fullName: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   avatar: string | null;
 
   @Column({ unique: true, length: 30 })
@@ -40,7 +33,7 @@ export class Instructor {
   ratingsCount: number;
 
   @Column({ default: true })
-  isInstructor: boolean ;
+  isInstructor: boolean;
 
   @Column({ default: true })
   active: boolean;
@@ -63,7 +56,7 @@ export class Instructor {
       this.password = await bcrypt.hash(this.password, 10);
     } catch (e) {
       console.log(e);
-      throw new InternalServerErrorException(); // 500
+      throw new InternalServerErrorException();
     }
   }
 }

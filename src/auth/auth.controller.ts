@@ -10,7 +10,7 @@ import { CreateInstructorDto } from 'src/instructor/dto/create-instructor.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('user/signup') // v1/users -> Post method
+  @Post('user/signup') 
   @UseInterceptors(FileInterceptor('file'))
   create(
     @UploadedFile() file: Express.Multer.File,

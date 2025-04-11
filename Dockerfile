@@ -1,6 +1,5 @@
 # Building layer
-FROM node:20-alpine as development
-
+FROM node:20-alpine AS development
 # Create working directory
 WORKDIR /app
 

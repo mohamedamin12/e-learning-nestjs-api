@@ -10,18 +10,15 @@ import { User } from 'src/user/entities/user.entity';
 @Injectable()
 export class AdminDashboardService {
   constructor(
-    @InjectRepository(User) private readonly userRepo: Repository<User>,
-    @InjectRepository(Review) private readonly reviewRepo: Repository<Review>,
-    @InjectRepository(Course) private readonly courseRepo: Repository<Course>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Review) private readonly reviewRepository: Repository<Review>,
+    @InjectRepository(Course) private readonly courseRepository: Repository<Course>,
     @InjectRepository(Instructor)
-    private readonly instructorRepo: Repository<Instructor>,
+    private readonly instructorRepository: Repository<Instructor>,
   ) {}
 
-  async findAllActiveUsers(): Promise<{
-    data: User[];
-    activeUserCount: number;
-  }> {
-    const users = await this.userRepo.find({
+  async findAllActiveUsers() {
+    const users = await this.userRepository.find({
       where: { active: true },
       select: ['id', 'fullName', 'username', 'active'],
     });
@@ -29,11 +26,8 @@ export class AdminDashboardService {
     return { activeUserCount: userCount, data: users };
   }
 
-  async findAllInactiveUsers(): Promise<{
-    data: User[];
-    inactiveUserCount: number;
-  }> {
-    const users = await this.userRepo.find({
+  async findAllInactiveUsers() {
+    const users = await this.userRepository.find({
       where: { active: false },
       select: ['id', 'fullName', 'username', 'active'],
     });
@@ -41,11 +35,8 @@ export class AdminDashboardService {
     return { inactiveUserCount: userCount, data: users };
   }
 
-  async findAllInactiveInstructors(): Promise<{
-    data: Instructor[];
-    inactiveInstructorsCount: number;
-  }> {
-    const instructors = await this.instructorRepo.find({
+  async findAllInactiveInstructors() {
+    const instructors = await this.instructorRepository.find({
       where: { active: false },
       select: ['id', 'fullName', 'username', 'active'],
     });
@@ -56,11 +47,8 @@ export class AdminDashboardService {
     };
   }
 
-  async findAllactiveInstructors(): Promise<{
-    data: Instructor[];
-    activeInstructorsCount: number;
-  }> {
-    const instructors = await this.instructorRepo.find({
+  async findAllactiveInstructors() {
+    const instructors = await this.instructorRepository.find({
       where: { active: true },
       select: ['id', 'fullName', 'username', 'active'],
     });
@@ -71,61 +59,61 @@ export class AdminDashboardService {
     };
   }
 
-  async deactiveUser(id: number) {
-    const user = await this.userRepo.findOneBy({ id });
+  async deactiveUser(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
     if (!user) throw new NotFoundException("user not found");
     user.active = false;
-    await this.userRepo.save(user);
+    await this.userRepository.save(user);
     return `user ${user.fullName} deactivated successfully ✔`;
   }
 
-  async activeUser(id: number) {
-    const user = await this.userRepo.findOneBy({ id });
+  async activeUser(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
     if (!user) throw new NotFoundException("user not found");
     user.active = true;
-    await this.userRepo.save(user);
+    await this.userRepository.save(user);
     return `user ${user.fullName} activated successfully ✔`;
   }
 
-  async deactiveInstructor(id: number) {
-    const instructor = await this.instructorRepo.findOneBy({
+  async deactiveInstructor(id: string) {
+    const instructor = await this.instructorRepository.findOneBy({
       id,
     });
     if (!instructor) throw new NotFoundException("instructor not found");;
 
     instructor.active = false;
-    await this.instructorRepo.save(instructor);
+    await this.instructorRepository.save(instructor);
     return `Instructor ${instructor.fullName} deactivated successfully ✔`;
   }
 
-  async activeInstructor(id: number) {
-    const instructor = await this.instructorRepo.findOneBy({
+  async activeInstructor(id: string) {
+    const instructor = await this.instructorRepository.findOneBy({
       id,
     });
     if (!instructor) throw new NotFoundException("instructor not found");;
     instructor.active = true;
-    await this.instructorRepo.save(instructor);
+    await this.instructorRepository.save(instructor);
     return `Instructor ${instructor.fullName} activated successfully ✔`;
   }
 
-  async removeCourse(id: number) {
-    const course = await this.courseRepo.findOne({
+  async removeCourse(id: string) {
+    const course = await this.courseRepository.findOne({
       where: { id },
       relations: ['reviews'],
     });
     if (!course) throw new NotFoundException("course not found");;
-    await this.reviewRepo.remove(course.reviews);
-    return await this.courseRepo.remove(course);
+    await this.reviewRepository.remove(course.reviews);
+    return await this.courseRepository.remove(course);
   }
 
-  async removeReview(id: number) {
-    const review = await this.reviewRepo.findOne({where: { id }, relations: ['course'] });
+  async removeReview(id: string) {
+    const review = await this.reviewRepository.findOne({where: { id }, relations: ['course'] });
     if (!review) {
       throw new NotFoundException("review not found");
     }
     const course = review.course;
     course.numberOfRatings--;
-    await this.courseRepo.save(course);
-    return await this.reviewRepo.delete(id);
+    await this.courseRepository.save(course);
+    return await this.reviewRepository.delete(id);
   }
 }

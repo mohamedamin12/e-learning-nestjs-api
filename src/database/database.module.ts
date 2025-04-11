@@ -9,7 +9,7 @@ dotenv.config();
       type: 'mysql',
       host: process.env.DB_HOST,
       port: +(process.env.DB_PORT ?? 3306),
-      url: process.env.DB_URl,
+      url: process.env.DB_URL,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
