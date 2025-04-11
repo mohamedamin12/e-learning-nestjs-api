@@ -8,6 +8,7 @@ import { comparePasswords } from './bcrypt/bcrypt';
 import * as crypto from 'crypto';
 import { SignInDto } from './dto/signin.dto';
 import { sendEmail } from 'src/utils/sendEmail';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     // @InjectRepository(Instructor) private readonly instructorRepo: Repository<Instructor>,
-    // private readonly cloudinarySrv: CloudinaryService,
+    private readonly cloudinaryService: CloudinaryService,
   ) { }
 
   async userSignup(
@@ -32,9 +33,9 @@ export class AuthService {
 
     const user = new User();
     Object.assign(user, createUserDto);
-    // if (file){
-    //   user.avatar = (await this.cloudinarySrv.uploadFile(file)).secure_url;
-    // }
+    if (file){
+      user.avatar = (await this.cloudinaryService.uploadFile(file)).secure_url;
+    }
 
 
     await this.userRepository.save(user);

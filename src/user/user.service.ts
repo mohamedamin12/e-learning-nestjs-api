@@ -4,11 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { sanitizeUser } from 'src/utils/sanitize/sanitizeResponse';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class UserService {
 
   constructor(
+    private readonly cloudinaryService: CloudinaryService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
   
@@ -48,14 +50,14 @@ export class UserService {
     req: any,
     updateUserDto: UpdateUserDto,
     file: Express.Multer.File,
-  ): Promise<Partial<User>> {
+  ) {
     const { id } = req.user;
     const user = await this.userRepository.findOneBy({ id });
     if (!user) throw new NotFoundException('user not found');
-    Object.assign(user, updateUserDto); //  target , source
-    // if (file) {
-    //   user.avatar = (await this.cloudinarySrv.uploadFile(file)).secure_url;
-    // }
+    Object.assign(user, updateUserDto); 
+    if (file) {
+      user.avatar = (await this.cloudinaryService.uploadFile(file)).secure_url;
+    }
     return sanitizeUser(await this.userRepository.save(user));
   }
 
