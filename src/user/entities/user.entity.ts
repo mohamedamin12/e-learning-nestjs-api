@@ -9,6 +9,8 @@ import {
   BeforeUpdate,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Course } from 'src/course/entities/course.entity';
+import { Review } from 'src/review/entities/review.entity';
 
 
 
@@ -57,12 +59,12 @@ export class User {
   @Column({ default: false, select: false })
   passwordResetVerified: Boolean | null;
 
-  // @OneToMany(() => Review, (reviews) => reviews.reviewCreator)
-  // reviews: Review[];
+  @OneToMany(() => Review, (reviews) => reviews.reviewCreator)
+  reviews: Review[];
 
-  // @ManyToMany(() => Course, { cascade: ['insert'] })
-  // @JoinTable()
-  // courses: Course[];
+  @ManyToMany(() => Course, { cascade: ['insert'] })
+  @JoinTable()
+  courses: Course[];
 
   @BeforeInsert()
   @BeforeUpdate()

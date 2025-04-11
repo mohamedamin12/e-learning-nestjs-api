@@ -6,11 +6,12 @@ import { User } from 'src/user/entities/user.entity';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
+import { Instructor } from 'src/instructor/entities/instructor.entity';
 
 @Module({
   imports: [
     CloudinaryModule,
-    TypeOrmModule.forFeature([User]), 
+    TypeOrmModule.forFeature([User , Instructor]), 
     UserModule,
     JwtModule.register({
       global: true,

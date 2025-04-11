@@ -4,6 +4,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { SignInDto } from './dto/signin.dto';
 import { AuthGuard } from './guards/auth.guard';
+import { CreateInstructorDto } from 'src/instructor/dto/create-instructor.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -26,22 +27,22 @@ export class AuthController {
     return this.authService.userSignIn(signInDto, rememberMe);
   }
 
-  // @Post('instructor/signup')
-  // @UseInterceptors(FileInterceptor('file'))
-  // instructorSignup(
-  //   @Body() createInstructorDto: CreateInstructorDto,
-  //   @UploadedFile() file: Express.Multer.File,
-  // ) {
-  //   return this.authService.instructorSignup(createInstructorDto, file);
-  // }
+  @Post('instructor/signup')
+  @UseInterceptors(FileInterceptor('file'))
+  instructorSignup(
+    @Body() createInstructorDto: CreateInstructorDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.authService.instructorSignup(createInstructorDto, file);
+  }
 
-  // @Post('instructor/signin')
-  // instructorSignIn(
-  //   @Body() signInDto: SignInDto,
-  //   @Query('rememberMe') rememberMe: string,
-  // ) {
-  //   return this.authService.instructorSignIn(signInDto, rememberMe);
-  // }
+  @Post('instructor/signin')
+  instructorSignIn(
+    @Body() signInDto: SignInDto,
+    @Query('rememberMe') rememberMe: string,
+  ) {
+    return this.authService.instructorSignIn(signInDto, rememberMe);
+  }
 
   @UseGuards(AuthGuard)
   @Get('user/profile')

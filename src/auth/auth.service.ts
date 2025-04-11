@@ -9,6 +9,8 @@ import * as crypto from 'crypto';
 import { SignInDto } from './dto/signin.dto';
 import { sendEmail } from 'src/utils/sendEmail';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { Instructor } from 'src/instructor/entities/instructor.entity';
+import { CreateInstructorDto } from 'src/instructor/dto/create-instructor.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +18,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    // @InjectRepository(Instructor) private readonly instructorRepo: Repository<Instructor>,
+    @InjectRepository(Instructor) private readonly instructorRepo: Repository<Instructor>,
     private readonly cloudinaryService: CloudinaryService,
   ) { }
 
@@ -103,6 +105,83 @@ export class AuthService {
     }
   }
 
+  async instructorSignup(
+    createInstructorDto: CreateInstructorDto,
+    file: Express.Multer.File,
+  ): Promise<{ instructor: Instructor; token: string }> {
+    const existingInstructor = await this.instructorRepo.findOne({
+      where: { email: createInstructorDto.email },
+    });
+    if (existingInstructor) throw new BadRequestException('instructor already exists');
+    const instructor = new Instructor();
+    Object.assign(instructor, createInstructorDto);
+    if (file) {
+      instructor.avatar = (
+        await this.cloudinaryService.uploadFile(file)
+      ).secure_url;
+    }
+    await this.instructorRepo.save(instructor);
+    const payload = {
+      id: instructor.id,
+      isInstructor: instructor.isInstructor,
+    };
+    return {
+      instructor,
+      token: await this.jwtService.signAsync(payload, {
+        expiresIn: '3d',
+      }),
+    };
+  }
+
+  async instructorSignIn(
+    signInDto: SignInDto,
+    rememberMe: string,
+  ) {
+    const instructor = await this.instructorRepo.findOne({
+      where: { username: signInDto.username },
+      select: [
+        'id',
+        'email',
+        'username',
+        'password',
+        'isInstructor',
+        'coursesCount',
+        'fullName',
+        'studentsCount',
+        'avatar',
+        'ratingsCount',
+        'instructorDescription',
+        'createdAt',
+      ],
+    });
+
+    if (!instructor) throw new BadRequestException();
+    const matched = comparePasswords(signInDto.password, instructor.password);
+    if (!matched) throw new BadRequestException();
+    if (matched) {
+      const payload = {
+        id: instructor.id,
+        isInstructor: instructor.isInstructor,
+      };
+      if (rememberMe === 'true') {
+        return {
+          user: instructor,
+          token: await this.jwtService.signAsync(payload, {
+            expiresIn: '7d',
+          }),
+        };
+      } else if (rememberMe === 'false') {
+        return {
+          user: instructor,
+          token: await this.jwtService.signAsync(payload, {
+            expiresIn: '3d',
+          }),
+        };
+      } else {
+        throw new BadRequestException('Invalid query');
+      }
+    }
+  }
 
   async currentUser(req: any) {
     const { id, isInstructor, isAdmin } = req.user;
