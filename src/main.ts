@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 
 import * as compression from 'compression';
 import rateLimit from 'express-rate-limit';
-import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as hpp from 'hpp';
