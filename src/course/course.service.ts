@@ -61,12 +61,12 @@ export class CourseService {
       throw new BadRequestException(`Missing required fields: ${missingFields.join(', ')}`);
     }
 
-    // newCourse.courseCreator = instructor;
+    newCourse.courseCreator = instructor;
     newCourse.slug = slugify(createCourseDto.title, '-');
     Object.assign(newCourse, createCourseDto);
     newCourse.isCertified = createCourseDto.isCertified === 'true';
-    // instructor.coursesCount++;
-    // await this.instructorRepo.save(instructor);
+    instructor.coursesCount++;
+    await this.instructorRepository.save(instructor);
     if (file) {
       newCourse.thumbnails = (
         await this.cloudinaryService.uploadFile(file)

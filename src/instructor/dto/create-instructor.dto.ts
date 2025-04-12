@@ -2,6 +2,7 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateInstructorDto {
   @IsString()
+  @IsOptional()
   instructorDescription: string;
 
   @IsString()

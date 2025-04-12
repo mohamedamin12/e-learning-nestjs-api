@@ -75,7 +75,7 @@ export class AuthService {
       ],
     });
 
-    if (!user) throw new UnauthorizedException();
+    if (!user) throw new NotFoundException("user not found");
     const matched = comparePasswords(signInDto.password, user.password);
     if (!matched) throw new UnauthorizedException();
     const { password, ...userWithoutPassword } = user;
@@ -186,10 +186,10 @@ export class AuthService {
   async currentUser(req: any) {
     const { id, isInstructor, isAdmin } = req.user;
     if (isInstructor) {
-      // const instructor = await this.instructorRepo.findOneBy({ id });
-      // return {
-      //   user: instructor,
-      // };
+      const instructor = await this.instructorRepo.findOneBy({ id });
+      return {
+        user: instructor,
+      };
     } else if (isAdmin === false) {
       const user = await this.userRepository.findOneBy({ id });
       return { user: user };
