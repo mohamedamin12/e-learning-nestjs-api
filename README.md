@@ -1,97 +1,136 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# E-learning-Nestjs-Api
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Table of Contents
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- [Project Description](#project-description)
+  - [Authentication Management](#authentication-management)
+  - [Instructor](#instructor)
+  - [Course Management](#course-management)
+  - [User Interaction](#user-interaction)
+  - [Dealing with images](#dealing-with-images)
+  - [Robust Security System](#robust-security-system)
+  - [Seamless Integration](#seamless-integration)
+- [Used Technologies](#used-technologies)
+- [How to Install and Run the Project](#how-to-install-and-run-the-project)
+  - [Prerequisites](#prerequisites)
+  - [Dependencies Installation via Docker-Compose](#dependencies-installation-via-docker-compose)
+- [API Documentation](#api-documentation)
 
-## Description
+## Project Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**The E-Learning API Project is a robust backend system for managing users, instructors, and courses. The Platform offers the following key features:**
 
-## Project setup
 
-```bash
-$ npm install
+### _Authentication Management:_
+
+- **Users can register as students who consume the courses or instructors who create and manage courses.**
+- **It includes a password recovery feature, allowing users to receive a reset code via email and easily set a new password if they forget theirs.**
+
+### _Instructor:_
+
+- **Instructors can create and manage courses, providing important details such as course descriptions, prerequisites, what students will learn, and the course language.**
+
+- **Instructors can also upload course images using Cloudinary, with built-in image compression to ensure optimized performance.**
+
+### _Course Management:_
+
+- **Instructors can create and manage courses with rich details such as course descriptions, prerequisites, learning outcomes, and course language.**
+
+### _User Interaction:_
+
+- **Students can browse and enroll in courses, leave reviews, and rate courses using a star-based rating system along with written feedback.**
+
+### _Dealing with images:_
+
+- **The platform integrates `Cloudinary` for image uploading for users' profile picture & courses'cover** - **Also use `compression` package to anutilizes image compression, making the process faster and more efficient.**
+
+### _Robust Security System:_
+
+**The platform includes a solid security system with multiple protections:**
+
+- **CSRF Token Protection:** Prevents cross-site request forgery attacks.
+- **Spam Request Prevention:** Limits the number of requests per second to block spam attacks.
+- **Input Data Sanitization:** Ensures the application is safe from malicious scripts by cleaning user inputs.
+- **Request Body Size Limitation:** Prevents overloading the server memory by restricting large request payloads.
+
+### _Seamless Integration:_
+
+- **The API is designed to work effortlessly with frontend applications, mobile apps, and desktop apps, ensuring compatibility and flexibility across platforms.**
+- **This combination of user-friendly features and strong security measures makes the API a scalable and reliable solution for e-learning platforms.**
+
+---
+
+## _Used Technologies_
+
+- **Node.js**
+- **Nest.js**
+- **MySQL.**
+- **TypeORM**
+- **Docker**
+- **Docker-Compose**
+- **JWT**
+- **Bcrypt**
+- **Class-Transformer.**
+- **Class-Validator.**
+- **Cloudinary.**
+- **Compression.**
+- **Helmet.**
+- **Hpp.**
+- **Nodemailer.**
+- **Sanitize-Html.**
+- **slugify.**
+
+## How to Install and Run the Project
+
+### _Prerequisites_
+
+- **[Docker-Desktop](https://www.docker.com/products/docker-desktop/)**
+
+
+### _dependencies Installation via `Docker-Compose`_
+
+- **This command will install specific version of Nodejs and all packages with their versions which are exist in `package.json` and start the necessary containers for the project [ `phpmyadmin-ui` - `mysql-db`]. At the end the project gonna run .. all with one command**
+
+  **Here You are the Command :**
+
+```terminal
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d
 ```
 
-## Compile and run the project
+- **Also you should create a `.env` file in the root directory of the project and add the following environment variables:**
 
-```bash
-# development
-$ npm run start
+```example.env
+DB_HOST =
+DB_PORT =
+DB_NAME =
+DB_USERNAME =
+DB_PASSWORD =
 
-# watch mode
-$ npm run start:dev
+jwtSecret =
 
-# production mode
-$ npm run start:prod
+CLOUDINARY_URL=
+CLOUDINARY_CLOUD_NAME =
+CLOUDINARY_API_KEY =
+CLOUDINARY_API_SECRET=
+
+#? NodeMailer - Email settings
+# EMAIL_HOST=smtp.ethereal.email
+# Email_PORT=587
+EMAIL_USER=
+EMAIL_PASSWORD=
+
+COOKIE_SECRET_KEY=
 ```
 
-## Run tests
+- **Or you can see the file that includes all variables from here: [example.env](./example.env)**
 
-```bash
-# unit tests
-$ npm run test
+---
 
-# e2e tests
-$ npm run test:e2e
+## _API Documentation_
 
-# test coverage
-$ npm run test:cov
-```
+- **The API documentation is available at the following URL: [API Documentation](https://documenter.getpostman.com/view/34351164/2sB2cYe1iF)**
 
-## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
